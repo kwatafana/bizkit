@@ -1,138 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:bizkit/wid/scaffold.dart';
 import 'package:kong/kong.dart';
+import 'package:omatala/omatala.dart';
 
-/// Dashboard Screen
+// Dashboard Screen
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key, required this.title, required this.kong})
+  const DashboardScreen(
+      {Key? key,
+      required this.title,
+      required this.kong,
+      required this.omatala})
       : super(key: key);
   final KongAPI kong;
+  final OmatalaAPI omatala;
   final String title;
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState(kong: kong);
+  State<DashboardScreen> createState() =>
+      _DashboardScreenState(kong: kong, omatala: omatala);
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  _DashboardScreenState({required this.kong});
+  _DashboardScreenState({required this.kong, required this.omatala});
   final KongAPI kong;
-  @override
-  void initState() {
-    super.initState();
-  }
+  final OmatalaAPI omatala;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController retypedPasswordController = TextEditingController();
-
-    return bizkitScaffold(
-        Row(children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(right: 5),
-            child: const Icon(Icons.cookie),
-          ),
-          const Text("BizKit | create account")
-        ]),
-        ListView(children: <Widget>[
-          Container(
-              margin: const EdgeInsets.only(top: 30),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 5),
-                  child: const Icon(Icons.lock_open, color: Colors.white),
-                ),
-                const Text(
-                  "Account Dashboard",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ])),
-          Container(
-            padding: const EdgeInsets.all(5),
-            child: const Divider(color: Colors.tealAccent),
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              controller: usernameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Username",
-                labelStyle: TextStyle(color: Colors.grey),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.teal),
-                ),
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.displayMedium!,
+      textAlign: TextAlign.center,
+      child: FutureBuilder<Industry?>(
+        future: omatala
+            .fetchIndustry(), // a previously-obtained Future<String> or null
+        builder: (BuildContext context, AsyncSnapshot<Industry?> snapshot) {
+          List<Widget> children;
+          if (snapshot.hasData) {
+            children = <Widget>[
+              const Icon(
+                Icons.check_circle_outline,
+                color: Colors.green,
+                size: 60,
               ),
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Password",
-                labelStyle: TextStyle(color: Colors.grey),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.teal),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: const Text('Dashboard'),
               ),
-              obscureText: true,
-              style: const TextStyle(color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Industry: ${snapshot.data!.industry}'),
+              ),
+            ];
+          } else if (snapshot.hasError) {
+            children = <Widget>[
+              const Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Error: ${snapshot.error}'),
+              ),
+            ];
+          } else {
+            children = const <Widget>[
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text('Fetching data...'),
+              ),
+            ];
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: children,
             ),
-          ),
-          Container(
-              height: 50,
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              margin: const EdgeInsets.only(top: 10.0),
-              child: ElevatedButton(
-                child: const Text("login"),
-                onPressed: () async {
-                  final username = usernameController.text;
-                  final email = emailController.text;
-                  final password = passwordController.text;
-                  final retypedPassword = retypedPasswordController.text;
-
-                  if (username.isNotEmpty &&
-                      email.isNotEmpty &&
-                      password.isNotEmpty) {
-                    if (retypedPassword == password) {
-                      try {
-                        final account_input = AccountCreationInput.validCreate(
-                            username, email, password);
-                        final public_account_data =
-                            await kong.create(account_input);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(
-                                  "Account for ${public_account_data.username} created")),
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(e.toString())),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Password mismatch')),
-                      );
-                      return;
-                    }
-                  } else
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Fill in all fields')),
-                    );
-                  return;
-                },
-              )),
-        ]));
+          );
+        },
+      ),
+    );
   }
 }
