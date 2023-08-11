@@ -4,6 +4,7 @@ import 'package:bizkit/screens/create_account.dart';
 import 'package:bizkit/screens/login.dart';
 import 'package:bizkit/screens/dashboard.dart';
 import 'package:kong/kong.dart';
+import 'package:omatala/omatala.dart';
 
 void main() {
   runApp(const Bizkit());
@@ -14,8 +15,11 @@ class Bizkit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final kongKonfig = KongAPIKonfig("http://localhost:7878/", null, null);
+    final omatalaNodeAddress = "http://localhost:7878/";
+    final kongKonfig = KongAPIKonfig(omatalaNodeAddress, null, null);
+    final omatalaKonfig = OmatalaAPIConfig(omatalaNodeAddress);
     final kong = KongAPI(kongKonfig);
+    final omatala = OmatalaAPI(omatalaKonfig);
 
     return MaterialApp(
       title: 'BizKit',
@@ -28,7 +32,11 @@ class Bizkit extends StatelessWidget {
         '/create-account': (context) =>
             CreateAccountScreen(title: 'BizKit', kong: kong),
         '/login': (context) => LoginScreen(title: 'BizKit', kong: kong),
-        '/dashboard': (context) => DashboardScreen(title: 'BizKit', kong: kong),
+        '/dashboard': (context) => DashboardScreen(
+              title: 'BizKit',
+              kong: kong,
+              omatala: omatala,
+            ),
       },
     );
   }
