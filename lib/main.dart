@@ -15,7 +15,7 @@ class Bizkit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final omatalaNodeAddress = "http://localhost:7878/";
+    const omatalaNodeAddress = "http://localhost:7878/";
     final kongKonfig = KongAPIKonfig(omatalaNodeAddress, null, null);
     final omatalaKonfig = OmatalaAPIConfig(omatalaNodeAddress);
     final kong = KongAPI(kongKonfig);
