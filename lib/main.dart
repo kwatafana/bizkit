@@ -31,7 +31,8 @@ class Bizkit extends StatelessWidget {
         '/': (context) => const HomeScreen(title: 'BizKit'),
         '/create-account': (context) =>
             CreateAccountScreen(title: 'BizKit', kong: kong),
-        '/login': (context) => LoginScreen(title: 'BizKit', kong: kong),
+        '/login': (context) =>
+            LoginScreen(title: 'BizKit', kong: kong, omatala: omatala),
         '/dashboard': (context) => DashboardScreen(
               title: 'BizKit',
               kong: kong,
