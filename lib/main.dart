@@ -15,7 +15,7 @@ class Bizkit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final omatalaNodeAddress = "http://localhost:7878/";
+    const omatalaNodeAddress = "http://localhost:7878/";
     final kongKonfig = KongAPIKonfig(omatalaNodeAddress, null, null);
     final omatalaKonfig = OmatalaAPIConfig(omatalaNodeAddress);
     final kong = KongAPI(kongKonfig);
@@ -31,7 +31,8 @@ class Bizkit extends StatelessWidget {
         '/': (context) => const HomeScreen(title: 'BizKit'),
         '/create-account': (context) =>
             CreateAccountScreen(title: 'BizKit', kong: kong),
-        '/login': (context) => LoginScreen(title: 'BizKit', kong: kong),
+        '/login': (context) =>
+            LoginScreen(title: 'BizKit', kong: kong, omatala: omatala),
         '/dashboard': (context) => DashboardScreen(
               title: 'BizKit',
               kong: kong,
