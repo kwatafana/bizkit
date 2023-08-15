@@ -19,6 +19,7 @@ dependencies:
     path: ../../kong/krates/klient/dart/
   omatala:
     path: ../../omatala/crates/client/
+  image_picker: ^1.0.2
 
 
 dev_dependencies:
