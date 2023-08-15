@@ -26,14 +26,18 @@ class Bizkit extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      initialRoute: '/',
+      initialRoute: HomeScreen.navAddress,
       routes: {
-        '/': (context) => const HomeScreen(title: 'BizKit'),
-        '/create-account': (context) =>
+        HomeScreen.navAddress: (context) => const HomeScreen(title: 'BizKit'),
+        CreateAccountScreen.navAddress: (context) =>
             CreateAccountScreen(title: 'BizKit', kong: kong),
-        '/login': (context) =>
+        LoginScreen.navAddress: (context) =>
             LoginScreen(title: 'BizKit', kong: kong, omatala: omatala),
-        '/dashboard': (context) => DashboardScreen(
+        DashboardScreen.navAddress: (context) => DashboardScreen(
+              title: 'BizKit',
+              kong: kong,
+              omatala: omatala,
+            ),
               title: 'BizKit',
               kong: kong,
               omatala: omatala,
