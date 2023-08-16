@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bizkit/sme/real_estate/add_property.dart';
 
 Drawer bizkitMenu(context, String industry) {
   var menuList = [
@@ -38,7 +39,7 @@ List<StatelessWidget> realEstateMenu(context, List<StatelessWidget> menuList) {
   menuList.add(ListTile(
       title: const Text('Add Property'),
       onTap: () {
-        //Navigator.pushNamed(context, AboutScreen.routeName);
+        Navigator.pushNamed(context, AddPropertyScreen.navAddress);
       },
       textColor: Colors.teal));
 

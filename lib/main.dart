@@ -5,6 +5,7 @@ import 'package:bizkit/screens/login.dart';
 import 'package:bizkit/screens/dashboard.dart';
 import 'package:kong/kong.dart';
 import 'package:omatala/omatala.dart';
+import 'package:bizkit/sme/real_estate/add_property.dart';
 
 void main() {
   runApp(const Bizkit());
@@ -20,6 +21,9 @@ class Bizkit extends StatelessWidget {
     final omatalaKonfig = OmatalaAPIConfig(omatalaNodeAddress);
     final kong = KongAPI(kongKonfig);
     final omatala = OmatalaAPI(omatalaKonfig);
+
+    // Enable kong APIs used by bizkit
+    kong.enablePropertiesAPI();
 
     return MaterialApp(
       title: 'BizKit',
@@ -38,6 +42,7 @@ class Bizkit extends StatelessWidget {
               kong: kong,
               omatala: omatala,
             ),
+        AddPropertyScreen.navAddress: (context) => AddPropertyScreen(
               title: 'BizKit',
               kong: kong,
               omatala: omatala,
