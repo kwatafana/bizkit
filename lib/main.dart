@@ -5,6 +5,7 @@ import 'package:bizkit/screens/login.dart';
 import 'package:bizkit/screens/dashboard.dart';
 import 'package:kong/kong.dart';
 import 'package:omatala/omatala.dart';
+import 'package:bizkit/sme/real_estate/add_property.dart';
 
 void main() {
   runApp(const Bizkit());
@@ -21,19 +22,27 @@ class Bizkit extends StatelessWidget {
     final kong = KongAPI(kongKonfig);
     final omatala = OmatalaAPI(omatalaKonfig);
 
+    // Enable kong APIs used by bizkit
+    kong.enablePropertiesAPI();
+
     return MaterialApp(
       title: 'BizKit',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      initialRoute: '/',
+      initialRoute: HomeScreen.navAddress,
       routes: {
-        '/': (context) => const HomeScreen(title: 'BizKit'),
-        '/create-account': (context) =>
+        HomeScreen.navAddress: (context) => const HomeScreen(title: 'BizKit'),
+        CreateAccountScreen.navAddress: (context) =>
             CreateAccountScreen(title: 'BizKit', kong: kong),
-        '/login': (context) =>
+        LoginScreen.navAddress: (context) =>
             LoginScreen(title: 'BizKit', kong: kong, omatala: omatala),
-        '/dashboard': (context) => DashboardScreen(
+        DashboardScreen.navAddress: (context) => DashboardScreen(
+              title: 'BizKit',
+              kong: kong,
+              omatala: omatala,
+            ),
+        AddPropertyScreen.navAddress: (context) => AddPropertyScreen(
               title: 'BizKit',
               kong: kong,
               omatala: omatala,

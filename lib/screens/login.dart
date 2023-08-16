@@ -3,6 +3,7 @@ import 'package:bizkit/wid/scaffold.dart';
 import 'package:kong/kong.dart';
 import 'package:bizkit/wid/menu.dart';
 import 'package:omatala/omatala.dart';
+import 'package:bizkit/screens/dashboard.dart';
 
 /// Login Screen
 class LoginScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class LoginScreen extends StatefulWidget {
   final KongAPI kong;
   final OmatalaAPI omatala;
   final String title;
+  static String navAddress = "/login";
 
   @override
   State<LoginScreen> createState() =>
@@ -127,7 +129,7 @@ login(String username, String password, KongAPI kong, OmatalaAPI omatala,
       await omatala.fetchIndustry();
 
       // Navigate to dashboard screen
-      Navigator.pushNamed(context, '/dashboard');
+      Navigator.pushNamed(context, DashboardScreen.navAddress);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),

@@ -15,6 +15,7 @@ class DashboardScreen extends StatefulWidget {
   final KongAPI kong;
   final OmatalaAPI omatala;
   final String title;
+  static String navAddress = "/dashboard";
 
   @override
   State<DashboardScreen> createState() =>

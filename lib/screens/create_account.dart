@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bizkit/wid/scaffold.dart';
 import 'package:kong/kong.dart';
 import 'package:bizkit/wid/menu.dart';
+import 'package:bizkit/screens/login.dart';
 
 /// Create Account Screen
 class CreateAccountScreen extends StatefulWidget {
@@ -9,7 +10,7 @@ class CreateAccountScreen extends StatefulWidget {
       : super(key: key);
   final KongAPI kong;
   final String title;
-
+  static String navAddress = "/create-account";
   @override
   State<CreateAccountScreen> createState() =>
       _AddProjectScreenState(kong: kong);
@@ -147,7 +148,7 @@ Widget body(context, kong) {
                         content: Text(
                             "Account for ${public_account_data.username} created!")),
                   );
-                  Navigator.pushNamed(context, '/login');
+                  Navigator.pushNamed(context, LoginScreen.navAddress);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(e.toString())),

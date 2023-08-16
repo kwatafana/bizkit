@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:bizkit/screens/create_account.dart';
+import 'package:bizkit/screens/login.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
   final String title;
+  static String navAddress = "/";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -37,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text("Create Account"),
                         ]),
                     onPressed: () async {
-                      Navigator.pushNamed(context, '/create-account');
+                      Navigator.pushNamed(
+                          context, CreateAccountScreen.navAddress);
                     })),
             Container(
                 height: 50,
@@ -52,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text("Account Login"),
                         ]),
                     onPressed: () async {
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushNamed(context, LoginScreen.navAddress);
                     }))
           ],
         ),
