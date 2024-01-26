@@ -1,44 +1,6 @@
-//! bizkit -- Inventory
-
-use chrono::{DateTime, Utc};
 use rusqlite::{params, Connection};
-use serde::{Deserialize, Serialize};
-use std::fmt;
-
-/// Iventory product
-#[derive(Clone, Deserialize, Serialize)]
-pub struct Product {
-    /// Name of the product
-    pub name: String,
-    /// Manufacturer of the product
-    pub manufacturer: String,
-    /// Barcode
-    pub barcode: String,
-    /// Categories that the product belongs to
-    pub categories: Option<String>,
-    /// Unit of measurements
-    pub unit: Option<String>,
-    /// Weight of the product
-    pub weight: Option<f64>,
-    /// The price of the product
-    pub price: Option<f64>,
-    /// Is the product taxable or not
-    pub taxable: Option<bool>,
-    /// Product description
-    pub description: String,
-    /// Product Images
-    pub images: String,
-    /// Warehouse of the product
-    pub warehouse: Option<String>,
-    /// User who added the product
-    pub added_by: String,
-    /// Is the product sold or not
-    pub sold: Option<DateTime<Utc>>,
-    /// User who sold the product
-    pub sold_by: Option<String>,
-    /// Date when product was added,
-    pub added: DateTime<Utc>,
-}
+use std::{fmt, path::PathBuf};
+use crate::product::Product;
 
 mod sql {
     /// Create inventory table
@@ -59,7 +21,7 @@ mod sql {
         added_by TEXT,                                -- User who added the product
         sold TEXT,                                    -- Is the product sold or not
         sold_by String,                               -- User who sold the product
-        added TEXT)                                    -- The date when the product was added, the Rust Type is `chrono::DateTime`";
+        added TEXT)                                   -- The date when the product was added, the Rust Type is `chrono::DateTime`";
 
     /// Add a product
     pub(crate) const ADD_PRODUCT: &str = "
@@ -123,18 +85,15 @@ mod sql {
 /// Inventory database controller
 pub struct InventoryDatabase {
     /// Inventory Database file path
-    path: String,
+    path: PathBuf,
     /// An SQLite connection handle
     conn: Option<Connection>,
 }
 
 impl InventoryDatabase {
     /// Setup database
-    pub fn new(path: &str) -> Self {
-        InventoryDatabase {
-            path: path.to_string(),
-            conn: None,
-        }
+    pub fn new(path: PathBuf) -> Self {
+        InventoryDatabase { path, conn: None }
     }
 
     /// Connect database
@@ -316,51 +275,51 @@ impl fmt::Display for Error {
 #[cfg(test)]
 mod test {
     use super::*;
-
+    use chrono::Utc;
     const TEST_DB_PATH: &str = "test-data/INVENTORY.sqlite";
 
     #[test]
     fn connect_db() {
-        let mut db = InventoryDatabase::new(TEST_DB_PATH);
+	let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
 
-        // Connect to database
-        db.connect();
+	// Connect to database
+	db.connect();
 
-        if db.conn.is_none() {
-            panic!("Could not connect to database");
-        }
+	if db.conn.is_none() {
+	    panic!("Could not connect to database");
+	}
     }
     #[test]
     fn test_store_get_property() {
-        let mut db = InventoryDatabase::new(TEST_DB_PATH);
+	let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
 
-        let product = Product {
-            name: "Luxury Hill".to_string(),
-            manufacturer: "Apple".to_string(),
-            barcode: "3223223".to_string(),
-            categories: Some("Hardware, Mobile".to_string()),
-            unit: Some("meters".to_string()),
-            weight: None,
-            price: None,
-            taxable: None,
-            description: "Cool product".to_string(),
-            images: "img1.jpg, img2.jpg".to_string(),
-            warehouse: None,
-            added_by: "Jon".to_string(),
-            sold: None,
-            sold_by: None,
-            added: Utc::now(),
-        };
+	let product = Product {
+	    name: "Luxury Hill".to_string(),
+	    manufacturer: "Apple".to_string(),
+	    barcode: "3223223".to_string(),
+	    categories: Some("Hardware, Mobile".to_string()),
+	    unit: Some("meters".to_string()),
+	    weight: None,
+	    price: None,
+	    taxable: None,
+	    description: "Cool product".to_string(),
+	    images: "img1.jpg, img2.jpg".to_string(),
+	    warehouse: None,
+	    added_by: "Jon".to_string(),
+	    sold: None,
+	    sold_by: None,
+	    added: Utc::now(),
+	};
 
-        db.connect().unwrap();
-        db.add_product(&product).unwrap();
+	db.connect().unwrap();
+	db.add_product(&product).unwrap();
 
-        let pr = db.get_product_by_id(1).unwrap();
+	let pr = db.get_product_by_id(1).unwrap();
 
-        if let Some(p) = pr {
-            assert_eq!(&p.name, &product.name);
-        } else {
-            panic!("Could not get product from database");
-        }
+	if let Some(p) = pr {
+	    assert_eq!(&p.name, &product.name);
+	} else {
+	    panic!("Could not get product from database");
+	}
     }
 }
