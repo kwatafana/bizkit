@@ -28,6 +28,71 @@
   NON-GOALS
     x Quick cash
 
+  BizKit POS
+    0 Inventory: A POS system should also serve as good inventory
+      management software and make the process effortless as it is
+      the most essential POS feature in a system. You should be able
+      to monitor all the critical information about the inventory
+      counts, from individual SKUs to the overall number of units.
+      Moreover, it allows you to count the stock digitally rather
+      than manually, saving time and money.
+    0 Sales: A POS system can record a simple sale and deducts the
+      quantity sold from the inventory. Allows you to print the
+      invoice (if you have a receipt printer) or email it directly to
+      the customer.
+    0 Orders: Allows you to record orders taken in
+      store. In other words, products that your customers would like
+      to buy from you but you don’t have in stock, or that you don’t
+      normally sell in your store. When the product becomes available
+      in your inventory, you will have all the necessary information
+      to quickly inform your customers the product is available. If
+      your employees receive many requests for an item that you do
+      not have in your inventory, offering the product can represent
+      additional revenues.
+    0 Repairs: Allows you to closely monitor your customer’s items
+      that you repair in your shop. You will be able to repair items
+      such as watches or jewellery for example, and track a variety
+      of custom repair statuses very closely.
+    0 Rentals: Allows you to keep track of the products that have
+      been rented in your shop.
+    0 Supplier purchases: This allows you to have control over
+      purchases and make sure you have the items ordered from the
+      suppliers.
+    0 Employee management: Most POS systems come with some form of
+      employee management features, like tracking employee sales,
+      activity and performance. This makes it easy to see which
+      employees are your top earners, and which ones might require
+      more training. You can use these tools to run competitions and
+      reward your top performers.
+    0 Appointment booking: Although it is not as common a feature,
+      some POS systems have appointment-booking capabilities. This
+      tool enables appointment booking through your online store or
+      website. Then, you can manage appointments and sales within one
+      platform. This is especially useful for those operating in
+      professional service industries (e.g., nail salons, wellness
+      spas, repairs and health).
+    0 Reporting: Every POS system generates reports, but since the
+      depth of reporting varies, you’ll want one with the right
+      analytics for your business. Will you need basic reports for
+      sales per hour, inventory management or other metrics?
+      Look for a system with customizable reports that allow you to
+      filter data by date range and other factors. You may also want
+      a system that allows you to customize how the data is presented
+      and schedule automatic reports to be emailed to you.
+    0 Dashboards: POS systems have easy-to-use dashboards that give
+      you a quick summary of how your business is performing. You can
+      often see things like sales, inventory and performance at a
+      glance. 
+
+
+  HARDWARE
+    0 Android Tablet
+    0 Tablet stand
+    0 Credit card reader
+    0 Receipt printer
+    0 Barcode scanners
+    0 Cash Drawer (Optional)
+    
   SIMILAR PROJECTS:
     x xero: https://www.xero.com/us/                  (accounting)
     x shopify: https://www.shopify.com/               (ecommerce)
