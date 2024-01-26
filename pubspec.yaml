@@ -16,9 +16,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^1.1.0
   kong:
-    path: ../../kong/krates/klient/dart/
+    path: ../kong/krates/klient/dart/
   omatala:
-    path: ../../omatala/crates/client/
+    path: omatala/crates/client/
   image_picker: ^1.0.2
 
 
