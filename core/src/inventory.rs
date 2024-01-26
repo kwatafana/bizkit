@@ -1,3 +1,5 @@
+//! bizkit -- Inventory management
+
 use rusqlite::{params, Connection};
 use std::{fmt, path::PathBuf};
 use crate::product::Product;

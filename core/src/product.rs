@@ -1,3 +1,5 @@
+//! bizkit -- Product management
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
