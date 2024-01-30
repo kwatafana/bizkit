@@ -1,4 +1,9 @@
 *~
+target/
+assets/
+sme/
+test-data/
+www/
 # Miscellaneous
 *.class
 *.log
