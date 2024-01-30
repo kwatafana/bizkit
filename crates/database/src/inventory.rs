@@ -2,7 +2,7 @@
 
 use rusqlite::{params, Connection};
 use std::{fmt, path::PathBuf};
-use crate::product::Product;
+use bizkitdata::product::Product;
 
 mod sql {
     /// Create inventory table
