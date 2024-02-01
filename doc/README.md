@@ -8,7 +8,7 @@ date: last update 30-01-2024
 
 # BizKit
 
-> Operating System for SMEs
+> Offline first operating system for SMEs
 
 ## PROBLEM STATEMENT:
 
@@ -112,25 +112,25 @@ In __bizkit__ there are two types of accounts:
 
 ### Staff Account Schema (Version 0)
 
-| Field             | Description                                       | Data Type                                                |
-|-------------------|---------------------------------------------------|----------------------------------------------------------|
-| __firstname__     | First name of the staff                           | `String`                                                 |
-| __middlenames__   | Middle names of the staff                         | `Option<String>`                                         |
-| __lastname__      | Last name of the staff                            | `String`                                                 |
-| __username__      | Username of the staff                             | `String`                                                 |
-| __email__         | Email address of the staff                        | `String`                                                 |
-| __phone__         | Phone number to contact staff                     | `Option<String>`                                         |
-| __bio__           | Short bio of staff                                | `Option<String>`                                         |
-| __staffid__       | Unique staff id                                   | `Option<String>`                                         |
-| __isadmin__       | Indicates if staff is admin or not                | `bool`                                                   |
-| __groups__        | Indicates the groups the staff member belongs too | `Vec<String>`                                            |
-| __position__      | Staff's job position                              | `String`                                                 |
-| __joined__        | Date when staff started working in company        | `DateTime`                                               |
-| __status__        | Status of staff                                   | `StaffStatus` |
-| __lastlogin__     | Date when staff last logged in                    | `DateTime`                                               |
-| __gender__        | Gender of staff member                            | `Gender`                                                 |
-| __version__       | Data type schema version                          | `u32`                                                    |
-| __password_hash__ | Hash of password                                  | `String`                                                 |
+| Field             | Description                                       | Data Type          |
+|-------------------|---------------------------------------------------|--------------------|
+| __firstname__     | First name of the staff                           | `String`           |
+| __middlenames__   | Middle names of the staff                         | `Option<String>`   |
+| __lastname__      | Last name of the staff                            | `String`           |
+| __username__      | Username of the staff                             | `String`           |
+| __email__         | Email address of the staff                        | `String`           |
+| __phone__         | Phone number to contact staff                     | `Option<String>`   |
+| __bio__           | Short bio of staff                                | `Option<String>`   |
+| __staffid__       | Unique staff id                                   | `Option<String>`   |
+| __isadmin__       | Indicates if staff is admin or not                | `bool`             |
+| __groups__        | Indicates the groups the staff member belongs too | `Vec<String>`      |
+| __position__      | Staff's job position                              | `String`           |
+| __joined__        | Date when staff started working in company        | `DateTime`         |
+| __status__        | Status of staff                                   | `StaffStatus`      |
+| __lastlogin__     | Date when staff last logged in                    | `Option<DateTime>` |
+| __gender__        | Gender of staff member                            | `Gender`           |
+| __version__       | Data type schema version                          | `u16`              |
+| __password_hash__ | Hash of password                                  | `String`           |
 
 
 `StaffStatus` is the __enum__:
