@@ -1,11 +1,11 @@
-use serde::{Deserialize, Serialize, de::Deserializer, ser::Serializer};
+use serde::{Deserialize, de::Deserializer, ser::Serializer};
 use crate::Error;
 use std::fmt;
 use std::str::FromStr;
 use rusqlite::types::{ToSql, ToSqlOutput, FromSql, ValueRef, FromSqlResult, FromSqlError};
 
 /// The working status of a staff memeber
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug)]
 pub enum StaffStatus{
     /// Active staff member
     Active,
