@@ -6,6 +6,8 @@
 
 pub use staff::{Staff, StaffStatus};
 pub use product::Product;
+pub use error::Error;
 
 mod product;
 mod staff;
+mod error;
