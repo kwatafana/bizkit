@@ -1,7 +1,9 @@
 //! bizkit -- Inventory management
 
 use rusqlite::{params, Connection};
-use bizkitdata::product::Product;
+use std::path::PathBuf;
+use bizkitdata::Product;
+use crate::Error;
 
 mod sql {
     /// Create inventory table
@@ -239,7 +241,7 @@ impl InventoryDatabase {
 mod test {
     use super::*;
     use chrono::Utc;
-    const TEST_DB_PATH: &str = "test-data/INVENTORY.sqlite";
+    const TEST_DB_PATH: &str = "INVENTORY.sqlite";
 
     #[test]
     fn connect_db() {

@@ -52,6 +52,7 @@ name = "bizkitdata"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "kommon",
  "serde",
 ]
 
@@ -60,6 +61,7 @@ name = "bizkitdb"
 version = "0.1.0"
 dependencies = [
  "bizkitdata",
+ "chrono",
  "rusqlite",
  "serde",
 ]
@@ -167,6 +169,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c5f195fe497f702db0f318b07fdd68edb16955aed830df8363d837542f8f935a"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "kommon"
+version = "0.1.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

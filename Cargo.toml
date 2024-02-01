@@ -9,6 +9,8 @@ documentation = "https://bizkit.kwatafana.org/"
 
 [workspace.dependencies]
 
+kommon = {path = "../kommon"}
+
 ############################## [Data] ################################
 serde = { version = "1.0.196", features = ["derive"] } # A generic serialization/deserialization framework
 serde_json = {version = "1.0.113"}

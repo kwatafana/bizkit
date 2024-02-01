@@ -10,3 +10,6 @@ documentation.workspace = true
 bizkitdata = { path = "../data/"}
 serde.workspace = true
 rusqlite.workspace = true
+
+[dev-dependencies]
+chrono.workspace = true
