@@ -6,4 +6,6 @@
 
 pub mod inventory;
 pub use error::Error;
+pub use staff::Database;
+mod staff;
 mod error;
