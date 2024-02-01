@@ -2,22 +2,23 @@
 
 use rusqlite::{params, Connection};
 use crate::Error;
+use bizkitdata::Staff;
 
 /// SQL queries for staff accounts
 mod sql{
     /// Create staff table
     pub(crate) const CREATE_STAFF_TABLE: &str = "
       CREATE TABLE IF NOT EXISTS staff (
-        id INTEGER PRIMARY KEY,                       -- The Identifier of the product, the Rust Type is `i64`
+        id INTEGER PRIMARY KEY,                       -- The Identifier of the staff, the Rust Type is `i64`
+        username TEXT NOT NULL,                       -- Username of the staff
         firstname TEXT NOT NULL,                      -- First name of the staff
         middlenames TEXT,                             -- Middle names of the staff
         lastname TEXT NOT NULL,                       -- Last name of the staff
-        username TEXT NOT NULL,                       -- Username of the staff
         email TEXT NOT NULL,                          -- Email address of the staff
         phone TEXT,                                   -- Phone number to contact staff
         bio TEXT,                                     -- Short bio of staff
         staffid TEXT,                                 -- Unique staff id
-        isadmin INTEGER NOT NULL,                     -- Indicates if staff is admin or not
+        isadmin INTEGER DEFAULT(0) NOT NULL,          -- Indicates if staff is admin or not
         groups TEXT DEFAULT('[]') NOT NULL,           -- Indicates the groups the staff member belongs too
         position TEXT NOT NULL,                       -- Staff's job position
         joined TEXT DEFAULT(date('now')) NOT NULL,    -- Date when staff started working in company
@@ -26,9 +27,51 @@ mod sql{
         gender TEXT,                                  -- Gender of staff member
         version TEXT NOT NULL,                        -- Data type schema version
         password_hash TEXT NOT NULL)                  -- Hash of password";
+
+    /// Add staff
+    pub(crate) const ADD_STAFF: &str = "
+      INSERT INTO staff (username,
+        firstname,
+        middlenames,
+        lastname,
+        email,
+        phone,
+        bio,
+        staffid,
+        isadmin,
+        groups,
+        position,
+        joined,
+        status,
+        gender,
+        version,
+        password_hash)
+      VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16)";
+
+    /// Get staff by username
+    pub(crate) const GET_STAFF_BY_USERNAME: &str = "SELECT
+        username,
+        firstname,
+        middlenames,
+        lastname,
+        email,
+        phone,
+        bio,
+        staffid,
+        isadmin,
+        groups,
+        position,
+        joined,
+        status,
+        lastlogin,
+        gender,
+        version,
+        password_hash
+       FROM staff WHERE username = ?;";
+
 }
 
-/// database controller
+/// Database controller
 pub struct Database {
     /// Database file path
     path: String,
@@ -37,6 +80,7 @@ pub struct Database {
 }
 
 impl Database {
+    /// Create new database
     pub fn new(path: &str) -> Self {
         Database {
             path: path.to_string(),
@@ -44,6 +88,7 @@ impl Database {
         }
     }
 
+    /// Connect database
     pub fn connect(&mut self) -> Result<(), Error> {
         // Open database connection
         let conn =
@@ -67,6 +112,87 @@ impl Database {
             None => Err(Error::Connection),
         }
     }
+
+    /// Add staff
+    pub fn add_staff(&self, staff: &Staff) -> Result<(), Error> {
+        match &self.conn {
+            Some(conn) => {
+                conn.execute(
+                    sql::ADD_STAFF,
+                    params![
+                        &staff.username,
+			&staff.firstname,
+			&staff.middlenames,
+			&staff.lastname,
+			&staff.email,
+			&staff.phone,
+			&staff.bio,
+			&staff.staffid,
+                	&staff.isadmin,
+			&staff.groups,
+			&staff.position,
+			&staff.joined,
+			&staff.status,
+			&staff.gender,
+			&staff.version,
+			&staff.password_hash
+                    ],
+                )
+                    .map_err(|_| Error::Field)?;
+                Ok(())
+            }
+            None => Err(Error::Connection),
+        }
+    }
+
+    /// Get staff by username
+    pub fn get_staff_by_username(&self, id: i64) -> Result<Option<Staff>, Error> {
+        match &self.conn {
+            Some(conn) => {
+                let mut stmt = conn
+                    .prepare(sql::GET_STAFF_BY_USERNAME)
+                    .map_err(|_| Error::SQL)?;
+                let mut staff: Vec<Staff> = vec![];
+
+                let staff_iter = stmt
+                    .query_map(params![id], |s| {
+                        Ok(Staff {
+                            username: s.get(0).map_err(|_| Error::Field).unwrap(),
+			    firstname: s.get(1).map_err(|_| Error::Field).unwrap(),
+			    middlenames: s.get(2).map_err(|_| Error::Field).unwrap(),
+			    lastname: s.get(3).map_err(|_| Error::Field).unwrap(),
+			    email: s.get(4).map_err(|_| Error::Field).unwrap(),
+			    phone: s.get(5).map_err(|_| Error::Field).unwrap(),
+			    bio: s.get(6).map_err(|_| Error::Field).unwrap(),
+			    staffid: s.get(7).map_err(|_| Error::Field).unwrap(),
+			    isadmin: s.get(8).map_err(|_| Error::Field).unwrap(),
+			    groups: s.get(9).map_err(|_| Error::Field).unwrap(),
+			    position: s.get(10).map_err(|_| Error::Field).unwrap(),
+			    joined: s.get(11).map_err(|_| Error::Field).unwrap(),
+			    status: s.get(12).map_err(|_| Error::Field).unwrap(),
+			    lastlogin: s.get(13).map_err(|_| Error::Field).unwrap(),
+			    gender: s.get(14).map_err(|_| Error::Field).unwrap(),
+			    version: s.get(15).map_err(|_| Error::Field).unwrap(),
+			    password_hash: s.get(16).map_err(|_| Error::Field).unwrap(),
+                        })
+                    })
+                    .map_err(|_| Error::Field)?;
+
+                for c in staff_iter {
+                    staff.push(c.unwrap());
+                }
+
+                if staff.is_empty() {
+                    Ok(None)
+                } else {
+                    Ok(Some(staff[0].clone()))
+                }
+            }
+            None => Err(Error::Connection),
+        }
+    }
+
+
 }
 
 #[cfg(test)]
@@ -83,6 +209,42 @@ mod test {
 
 	if db.conn.is_none() {
 	    panic!("Could not connect to database");
+	}
+    }
+
+    #[test]
+    fn test_store_get_staff() {
+	let mut db = Database::new(TEST_DB_PATH.into());
+
+	let staff = Staff {
+	    username: "flyingrhino".to_string(),
+	    firstname: "John".to_string(),
+	    middlenames: None,
+	    lastname: "Pandeni".to_string(),
+	    email: "info.gmail.com".to_string(),
+	    phone: None,
+	    bio: None,
+	    staffid: None,
+	    isadmin: false,
+	    groups: vec![],
+	    position: "Manager".to_string(),
+	    joined: Utc::now(),
+	    status: bizkitdata::StaffStatus::Active,
+	    lastlogin: None,
+	    gender: None,
+	    version: 0,
+	    password_hash: "kdfa;lkfjioadfkdfjklj".to_string()
+	};
+
+	db.connect().unwrap();
+	db.add_staff(&staff).unwrap();
+
+	let pr = db.get_staff_by_username(1).unwrap();
+
+	if let Some(p) = pr {
+	    assert_eq!(&p.username, &staff.username);
+	} else {
+	    panic!("Could not get staff from database");
 	}
     }
 }

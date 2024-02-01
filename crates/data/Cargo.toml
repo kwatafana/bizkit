@@ -12,3 +12,4 @@ documentation.workspace = true
 kommon.workspace = true
 chrono.workspace = true
 serde.workspace = true
+rusqlite.workspace = true
