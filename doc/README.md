@@ -6,6 +6,10 @@ date: last update 30-01-2024
 ...
 ---
 
+# BizKit
+
+> Operating System for SMEs
+
 ## PROBLEM STATEMENT:
 
 Like it or not, the internet is now an integral part of society.
@@ -99,6 +103,76 @@ glance.
 - Barcode scanners
 - Cash Drawer (Optional)
 
+## Account System
+
+In __bizkit__ there are two types of accounts:
+
+- __`Staff`__: account for a staff/employee member.
+- __`Customer`__: account for a customer/client.
+
+### Staff Account Schema (Version 0)
+
+| Field             | Description                                       | Data Type                                                |
+|-------------------|---------------------------------------------------|----------------------------------------------------------|
+| __firstname__     | First name of the staff                           | `String`                                                 |
+| __middlenames__   | Middle names of the staff                         | `Option<String>`                                         |
+| __lastname__      | Last name of the staff                            | `String`                                                 |
+| __username__      | Username of the staff                             | `String`                                                 |
+| __email__         | Email address of the staff                        | `String`                                                 |
+| __phone__         | Phone number to contact staff                     | `Option<String>`                                         |
+| __bio__           | Short bio of staff                                | `Option<String>`                                         |
+| __staffid__       | Unique staff id                                   | `Option<String>`                                         |
+| __isadmin__       | Indicates if staff is admin or not                | `bool`                                                   |
+| __groups__        | Indicates the groups the staff member belongs too | `Vec<String>`                                            |
+| __position__      | Staff's job position                              | `String`                                                 |
+| __joined__        | Date when staff started working in company        | `DateTime`                                               |
+| __status__        | Status of staff                                   | `StaffStatus` |
+| __lastlogin__     | Date when staff last logged in                    | `DateTime`                                               |
+| __gender__        | Gender of staff member                            | `Gender`                                                 |
+| __version__       | Data type schema version                          | `u32`                                                    |
+| __password_hash__ | Hash of password                                  | `String`                                                 |
+
+
+`StaffStatus` is the __enum__:
+
+``` rust
+enum StaffStatus{
+    /// Active staff member
+    Active,
+    /// Retired staff member
+    Restired,
+    /// Resigned staff member
+    Resigned,
+    /// Absent staff member
+    Absent,
+    /// A staff memeber on holiday
+    Holiday,
+    /// A staff memeber on leave
+    Leave,
+    /// A staff memeber on vacation
+    Vacation
+}
+```
+
+`Gender`is the __enum__:
+
+``` rust
+enum Gender{
+    Male,
+    Female,
+    Other
+}
+```
+
+## Database System
+
+BizKit uses __Sqlite__ as its database engine, it makes use of the
+Rust's __rusqlite__ crate for Rust bindings Sqlite.
+
+BizKit has the following distinct databases:
+
+- __Staff.sqlite__: Use to store staff accounts.
+
 ## Milestones
 
 ### Alpha:
@@ -113,7 +187,7 @@ glance.
 - [ ] Basic Cybersec (HTTPS)
 - [ ] BizKit Cashbook
 
-### Alpha::Inventory
+#### Alpha::Inventory
 - [ ] Add product (Buy)
 - [ ] Remove product (Sell)
 - [ ] Delete product
@@ -122,44 +196,44 @@ glance.
 - [ ] Product tags (categories)
 - [ ] cloud
 
-### Alpha::BizPlan
+#### Alpha::BizPlan
 - [ ] Business Plan from template
 - [ ] Export PDF
 - [ ] Cloud
 
-### Alpha::Docs
+#### Alpha::Docs
 - [ ] Cloud backup
 - [ ] add doc
 - [ ] remove doc
 
-### Alpha::Business Profile / Accounts
+#### Alpha::Business Profile / Accounts
 - [ ] Profile form
 - [ ] Edit profile
 - [ ] cloud backup
 
-### Alpha::Marketing Assets
+#### Alpha::Marketing Assets
 - [ ] Flyer templates
 - [ ] Logos
 - [ ] Letter heads
 - [ ] Share assets via social media
 
-### Alpha::Email
+#### Alpha::Email
 - [ ] Read Emails
 - [ ] Send emails
 
-### Alpha::Website
+#### Alpha::Website
 - [ ] Basic htoml based pages
 - [ ] page editor
 - [ ] Basic page widgets
 
-### Alpha::SEO
+#### Alpha::SEO
 - [ ] Setup the core components of the SEO engine
 
-### Alpha::Cybersec
+#### Alpha::Cybersec
 - [ ] HTTPS
 - [ ] Kong
 
-### Alpha::Cashbook
+#### Alpha::Cashbook
 - [ ] Setup the core components of the cashbook engine. (Cashbook +
 accounting).
 
