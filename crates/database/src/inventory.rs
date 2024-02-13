@@ -1,9 +1,9 @@
 //! bizkit -- Inventory management
 
+use crate::Error;
+use bizkitdata::Product;
 use rusqlite::{params, Connection};
 use std::path::PathBuf;
-use bizkitdata::Product;
-use crate::Error;
 
 mod sql {
     /// Create inventory table
@@ -12,7 +12,7 @@ mod sql {
         id INTEGER PRIMARY KEY,                       -- The Identifier of the product, the Rust Type is `i64`
         name TEXT NOT NULL,                           -- Name of the product
         manufacturer TEXT,                            -- Manufacturer of the product
-        barcode TEXT,                                 -- Product barcode
+        barcode TEXT UNIQUE,                          -- Product barcode
         categories TEXT,                              -- Categories that the product belongs to
         unit TEXT,                                    -- Unit of measurements
         weight REAL,                                  -- Weight of the product
@@ -236,7 +236,6 @@ impl InventoryDatabase {
     }
 }
 
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -245,46 +244,46 @@ mod test {
 
     #[test]
     fn connect_db() {
-	let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
+        let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
 
-	// Connect to database
-	db.connect();
+        // Connect to database
+        db.connect();
 
-	if db.conn.is_none() {
-	    panic!("Could not connect to database");
-	}
+        if db.conn.is_none() {
+            panic!("Could not connect to database");
+        }
     }
     #[test]
-    fn test_store_get_property() {
-	let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
+    fn test_store_get_inventory() {
+        let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
 
-	let product = Product {
-	    name: "Luxury Hill".to_string(),
-	    manufacturer: "Apple".to_string(),
-	    barcode: "3223223".to_string(),
-	    categories: Some("Hardware, Mobile".to_string()),
-	    unit: Some("meters".to_string()),
-	    weight: None,
-	    price: None,
-	    taxable: None,
-	    description: "Cool product".to_string(),
-	    images: "img1.jpg, img2.jpg".to_string(),
-	    warehouse: None,
-	    added_by: "Jon".to_string(),
-	    sold: None,
-	    sold_by: None,
-	    added: Utc::now(),
-	};
+        let product = Product {
+            name: "Luxury Hill".to_string(),
+            manufacturer: "Apple".to_string(),
+            barcode: "3223223".to_string(),
+            categories: Some("Hardware, Mobile".to_string()),
+            unit: Some("meters".to_string()),
+            weight: None,
+            price: None,
+            taxable: None,
+            description: "Cool product".to_string(),
+            images: "img1.jpg, img2.jpg".to_string(),
+            warehouse: None,
+            added_by: "Jon".to_string(),
+            sold: None,
+            sold_by: None,
+            added: Utc::now(),
+        };
 
-	db.connect().unwrap();
-	db.add_product(&product).unwrap();
+        db.connect().unwrap();
+        db.add_product(&product).unwrap();
 
-	let pr = db.get_product_by_id(1).unwrap();
+        let pr = db.get_product_by_id(1).unwrap();
 
-	if let Some(p) = pr {
-	    assert_eq!(&p.name, &product.name);
-	} else {
-	    panic!("Could not get product from database");
-	}
+        if let Some(p) = pr {
+            assert_eq!(&p.name, &product.name);
+        } else {
+            panic!("Could not get product from database");
+        }
     }
 }
