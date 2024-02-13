@@ -1,13 +1,13 @@
 //! BizKit -- staff accounts
 
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
-use kommon::Gender;
 use crate::StaffStatus;
+use chrono::{DateTime, Utc};
+use kommon::Gender;
+use serde::{Deserialize, Serialize};
 
 /// Staff accounts
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
-pub struct Staff{
+#[derive(PartialEq, Debug, Serialize, Deserialize, Clone)]
+pub struct Staff {
     /// Username of the staff
     pub username: String,
     /// First name of the staff
@@ -39,7 +39,9 @@ pub struct Staff{
     /// Date when staff last logged in
     pub lastlogin: Option<DateTime<Utc>>,
     /// Gender of staff member
-    pub gender: Option<Gender>,
+    #[serde(serialize_with = "Gender::serialize")]
+    #[serde(deserialize_with = "Gender::deserialize")]
+    pub gender: Gender,
     /// Data type schema version
     pub version: u16,
     /// Hash of password
