@@ -1,44 +1,9 @@
-//! bizkit -- Inventory
+//! bizkit -- Inventory management
 
-use chrono::{DateTime, Utc};
+use crate::Error;
+use bizkitdata::Product;
 use rusqlite::{params, Connection};
-use serde::{Deserialize, Serialize};
-use std::fmt;
-
-/// Iventory product
-#[derive(Clone, Deserialize, Serialize)]
-pub struct Product {
-    /// Name of the product
-    pub name: String,
-    /// Manufacturer of the product
-    pub manufacturer: String,
-    /// Barcode
-    pub barcode: String,
-    /// Categories that the product belongs to
-    pub categories: Option<String>,
-    /// Unit of measurements
-    pub unit: Option<String>,
-    /// Weight of the product
-    pub weight: Option<f64>,
-    /// The price of the product
-    pub price: Option<f64>,
-    /// Is the product taxable or not
-    pub taxable: Option<bool>,
-    /// Product description
-    pub description: String,
-    /// Product Images
-    pub images: String,
-    /// Warehouse of the product
-    pub warehouse: Option<String>,
-    /// User who added the product
-    pub added_by: String,
-    /// Is the product sold or not
-    pub sold: Option<DateTime<Utc>>,
-    /// User who sold the product
-    pub sold_by: Option<String>,
-    /// Date when product was added,
-    pub added: DateTime<Utc>,
-}
+use std::path::PathBuf;
 
 mod sql {
     /// Create inventory table
@@ -47,7 +12,7 @@ mod sql {
         id INTEGER PRIMARY KEY,                       -- The Identifier of the product, the Rust Type is `i64`
         name TEXT NOT NULL,                           -- Name of the product
         manufacturer TEXT,                            -- Manufacturer of the product
-        barcode TEXT,                                 -- Product barcode
+        barcode TEXT UNIQUE,                          -- Product barcode
         categories TEXT,                              -- Categories that the product belongs to
         unit TEXT,                                    -- Unit of measurements
         weight REAL,                                  -- Weight of the product
@@ -59,7 +24,7 @@ mod sql {
         added_by TEXT,                                -- User who added the product
         sold TEXT,                                    -- Is the product sold or not
         sold_by String,                               -- User who sold the product
-        added TEXT)                                    -- The date when the product was added, the Rust Type is `chrono::DateTime`";
+        added TEXT)                                   -- The date when the product was added, the Rust Type is `chrono::DateTime`";
 
     /// Add a product
     pub(crate) const ADD_PRODUCT: &str = "
@@ -123,18 +88,15 @@ mod sql {
 /// Inventory database controller
 pub struct InventoryDatabase {
     /// Inventory Database file path
-    path: String,
+    path: PathBuf,
     /// An SQLite connection handle
     conn: Option<Connection>,
 }
 
 impl InventoryDatabase {
     /// Setup database
-    pub fn new(path: &str) -> Self {
-        InventoryDatabase {
-            path: path.to_string(),
-            conn: None,
-        }
+    pub fn new(path: PathBuf) -> Self {
+        InventoryDatabase { path, conn: None }
     }
 
     /// Connect database
@@ -274,54 +236,15 @@ impl InventoryDatabase {
     }
 }
 
-#[derive(Debug)]
-/// error management
-pub enum Error {
-    /// Database connection error
-    Connection,
-    /// Database transaction error
-    Transaction,
-    /// Database table creation error
-    TableCreation,
-    /// Database field error
-    Field,
-    /// SQL error
-    SQL,
-}
-
-impl std::error::Error for Error {}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Connection => {
-                write!(f, "Database connection")
-            }
-            Self::Transaction => {
-                write!(f, "Database transaction error")
-            }
-            Self::TableCreation => {
-                write!(f, "Database table creation error")
-            }
-            Self::Field => {
-                write!(f, "Database field error")
-            }
-            Self::SQL => {
-                write!(f, "Database SQL error")
-            }
-        }
-    }
-}
-
 #[cfg(test)]
 mod test {
     use super::*;
-
-    const TEST_DB_PATH: &str = "test-data/INVENTORY.sqlite";
+    use chrono::Utc;
+    const TEST_DB_PATH: &str = "INVENTORY.sqlite";
 
     #[test]
     fn connect_db() {
-        let mut db = InventoryDatabase::new(TEST_DB_PATH);
+        let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
 
         // Connect to database
         db.connect();
@@ -331,8 +254,8 @@ mod test {
         }
     }
     #[test]
-    fn test_store_get_property() {
-        let mut db = InventoryDatabase::new(TEST_DB_PATH);
+    fn test_store_get_inventory() {
+        let mut db = InventoryDatabase::new(TEST_DB_PATH.into());
 
         let product = Product {
             name: "Luxury Hill".to_string(),

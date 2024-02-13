@@ -1,0 +1,15 @@
+[package]
+name = "bizkitdb"
+edition = "2021"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+kommon.workspace = true
+bizkitdata = { path = "../data/"}
+serde.workspace = true
+serde_json.workspace = true
+rusqlite.workspace = true
+chrono.workspace = true
