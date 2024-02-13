@@ -9,7 +9,7 @@ documentation = "https://bizkit.kwatafana.org/"
 
 [workspace.dependencies]
 
-kommon = {path = "../kommon"}
+kommon = {path = "../kommon", features = ["serde", "rusqlite"]}
 
 ############################## [Data] ################################
 serde = { version = "1.0.196", features = ["derive"] } # A generic serialization/deserialization framework
