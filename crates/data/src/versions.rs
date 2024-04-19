@@ -1,0 +1,4 @@
+pub const CATEGORY_SCHEMA: i16 = 0;
+pub const PRODUCT_SCHEMA: i16 = 0;
+pub const PRODUCT_CATEGORIES_SCHEMA: i16 = 0;
+pub const PRODUCT_IMAGES_SCHEMA: i16 = 0;
