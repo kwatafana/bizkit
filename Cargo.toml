@@ -8,14 +8,13 @@ description = "Operating System for SMEs"
 documentation = "https://bizkit.kwatafana.org/"
 
 [workspace.dependencies]
+kong = { git = "https://gitlab.com/kwatafana/infra/kong.git"}
+kong_kontrollers = { git = "https://gitlab.com/kwatafana/infra/kontrollers.git", features = ["login", "postgres"]}
+kommon = { git = "https://gitlab.com/kwatafana/infra/kommon.git", features = ["serde"]}
 
-kommon = {path = "../kommon", features = ["serde", "rusqlite"]}
-
-############################## [Data] ################################
-serde = { version = "1.0.196", features = ["derive"] } # A generic serialization/deserialization framework
+serde = { version = "1.0.196", features = ["derive"] }
 serde_json = {version = "1.0.113"}
-toml = "0.8.8" # Encoder and decoder of TOML-formatted files and streams
-rusqlite = { version = "0.30.0", features = ["bundled", "chrono"]} #  Ergonomic wrapper for SQLite
-
-############################# [Misc] #################################
-chrono = { version = "0.4.33", features = ["serde"]} # Date and time library
+postgres = { version = "0.19.7", features = ["with-chrono-0_4", "with-serde_json-1"]}
+chrono = { version = "0.4.33", features = ["serde"]}
+rust_decimal = {version = "1.35.0", features = ["db-postgres"]}
+base64 = "0.22.0"

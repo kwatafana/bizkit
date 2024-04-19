@@ -1,5 +1,4 @@
 use crate::Error;
-use rusqlite::types::{FromSql, FromSqlError, FromSqlResult, ToSql, ToSqlOutput, ValueRef};
 use serde::{de::Deserializer, ser::Serializer, Deserialize};
 use std::fmt;
 use std::str::FromStr;
@@ -73,20 +72,5 @@ impl FromStr for StaffStatus {
             "Vacation" => Ok(StaffStatus::Vacation),
             _ => Err(Error::StaffStatus),
         }
-    }
-}
-
-impl ToSql for StaffStatus {
-    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
-        Ok(self.to_string().into())
-    }
-}
-
-impl FromSql for StaffStatus {
-    fn column_result(value: ValueRef<'_>) -> FromSqlResult<Self> {
-        value
-            .as_str()?
-            .parse()
-            .map_err(|e| FromSqlError::Other(Box::new(e)))
     }
 }
