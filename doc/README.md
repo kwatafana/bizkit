@@ -164,15 +164,6 @@ enum Gender{
 }
 ```
 
-## Database System
-
-BizKit uses __Sqlite__ as its database engine, it makes use of the
-Rust's __rusqlite__ crate for Rust bindings Sqlite.
-
-BizKit has the following distinct databases:
-
-- __Staff.sqlite__: Use to store staff accounts.
-
 ## Milestones
 
 ### Alpha:

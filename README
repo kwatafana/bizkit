@@ -15,7 +15,7 @@ Contributing
   Everyone is welcomed  to contribute
 
 Unlicense
-  Written and placed in the public domain by Jackson G. Kaindume.
+  Written and placed in the public domain by cy6erlion
 
   Anyone is free to copy, modify, publish, use, compile, sell, or
   distribute this software, either in source code form or as a
@@ -26,7 +26,7 @@ Unlicense
   repository.
 
 Source
-  $ git clone https://gitlab.com/kwatafana/commerce/bizkit.git
+  $ git clone https://github.com/kwatafana/bizkit.git
   
 Authors
-  Jackson G. Kaindume
+  cy6erlion
